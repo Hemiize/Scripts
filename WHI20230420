@@ -1,0 +1,34 @@
+function findButterflyNames()
+    local butterflyNames = {}
+    for _, obj in ipairs(game.Workspace:GetChildren()) do
+        if obj:IsA("Model") and obj:FindFirstChild("LeftWing") then
+            local name = obj.Name
+            if name:match("{%x+%-%x+%-%x+%-%x+%-%x+}") then
+                table.insert(butterflyNames, name)
+            end
+        end
+    end
+    return butterflyNames
+end
+
+function teleportToButterflies()
+    local butterflyNames = findButterflyNames()
+    for _, name in ipairs(butterflyNames) do
+        local butterflyModel = game.Workspace[name]
+        if butterflyModel then
+            local leftWing = butterflyModel.LeftWing
+            if leftWing then
+                local character = game.Players.LocalPlayer.Character
+                if character and character:FindFirstChild("HumanoidRootPart") then
+                    local humanoidRootPart = character.HumanoidRootPart
+                    humanoidRootPart.CFrame = CFrame.new(leftWing.Position)
+                end
+            end
+        end
+    end
+end
+
+while true do
+    teleportToButterflies()
+    wait(0.5)
+end
